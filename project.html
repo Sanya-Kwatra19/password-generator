@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-100 flex justify-center items-center min-h-screen " style="background-image: url(./password\ image.jpg);">
+   <div class="w-full max-w-2xl ">
+    <div class="flex justify-center my-5">
+        <h1 class="text-4xl mx-3 font-bold text-blue-300">Secure Pass<span class="text-white"> Password</span> Generator</h1>
+    </div>
+    <div class="bg-blue-100 p-3 text-xl">
+        <div class="w-full flex justify-center items-center gap-3 my-4">
+            <label for="length">Length</label>
+            <input class="w-full" type="range" name="length" id="length" min="6" max="20" value="12">
+            <span id="lengthValue">12</span>
+        </div>
+        <div class="flex flex-wrap my-1">
+            <div class="w-1/2">
+                <input type="checkbox" name="uppercase" id="uppercase" checked>
+                <label for="uppercase">Uppercase</label>
+            </div>
+            <div class="w-1/2 my-1">
+                <input type="checkbox" name="lowercase" id="lowercase" checked>
+                <label for="lowercase">Lowercase</label>
+            </div>
+            <div class="w-1/2 my-1">
+                <input type="checkbox" name="numbers" id="numbers" checked>
+                <label for="numbers">Numbers</label>
+            </div>
+            <div class="w-1/2 my-1">
+                <input type="checkbox" name="symbols" id="symbols" checked>
+                <label for="symbols">Symbols</label>
+            </div>
+            
+        </div>
+        <div class="text-center my-3">
+            <button id="generateBtn" class="bg-blue-500 hover:bg-blue-600 px-3 py-4 rounded-lg text-white font-bold">Generate</button>
+        </div>
+    </div>
+    <div class="flex flex-col items-center">
+        <div class="bg-blue-500 w-full">
+            <div class="text-center border m-3 rounded  border-blue-300" >
+                <h1 id="passwordDisplay" class="text-6xl text-blue-200 p-5">**************</h1>
+            </div>
+            <div class="text-center my-2 italic text-sm font-bold">
+                <h3 id="passwordStrengthLabel">Extremely Strong</h3>
+            </div>
+        </div>
+        <div class="flex justify-between w-full">
+            <button id="copyBtn" class="bg-gray-500 py-2 px-4 rounded-b-xl text-gray-200 font-bold flex justify-center items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                  </svg>
+                  
+                Copy</button>
+            <button id="showBtn" class="bg-gray-500 py-2 px-4 rounded-b-xl text-gray-200 font-bold
+            flex justify-center items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                  
+                Show</button>
+        </div>
+    </div>
+   </div>
+   <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const lengthInput = document.getElementById('length');
+            const lengthValue = document.getElementById('lengthValue');
+            const uppercaseCheckbox = document.getElementById('uppercase');
+            const lowercaseCheckbox = document.getElementById('lowercase');
+            const numbersCheckbox = document.getElementById('numbers');
+            const symbolsCheckbox = document.getElementById('symbols');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const showBtn = document.getElementById('showBtn');
+            const passwordDisplay = document.getElementById('passwordDisplay');
+            const passwordStrengthLabel = document.getElementById('passwordStrengthLabel');
+            
+            function generatePassword() {
+                const length = lengthInput.value;
+                const includeUppercase = uppercaseCheckbox.checked;
+                const includeLowercase = lowercaseCheckbox.checked;
+                const includeNumbers = numbersCheckbox.checked;
+                const includeSymbols = symbolsCheckbox.checked;
+
+                const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+                const numberChars = '0123456789';
+                const symbolChars = '!@#$%^&*()_+{}[]|:;<>,.?/~';
+
+                let chars = '';
+                if (includeUppercase) chars += uppercaseChars;
+                if (includeLowercase) chars += lowercaseChars;
+                if (includeNumbers) chars += numberChars;
+                if (includeSymbols) chars += symbolChars;
+
+                let password = '';
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * chars.length);
+                    password += chars[randomIndex];
+                }
+
+                return password;
+            }
+
+            function updatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 8) strength++;
+                if (password.match(/[a-z]/)) strength++;
+                if (password.match(/[A-Z]/)) strength++;
+                if (password.match(/[0-9]/)) strength++;
+                if (password.match(/[!@#$%^&*()_+{}[\]|:;<>,.?/~]/)) strength++;
+
+                // Update password strength label
+                if (strength === 0) {
+                    passwordStrengthLabel.textContent = "Very Weak";
+                } else if (strength === 1) {
+                    passwordStrengthLabel.textContent = "Weak";
+                } else if (strength === 2) {
+                    passwordStrengthLabel.textContent = "Moderate";
+                } else if (strength === 3) {
+                    passwordStrengthLabel.textContent = "Strong";
+                } else if (strength === 4) {
+                    passwordStrengthLabel.textContent = "Very Strong";
+                } else {
+                    passwordStrengthLabel.textContent = "Extremely Strong";
+                }
+            }
+
+            generateBtn.addEventListener('click', function () {
+                const password = generatePassword();
+                passwordDisplay.textContent = password;
+                updatePasswordStrength(password);
+            });
+
+            lengthInput.addEventListener('input', function () {
+                lengthValue.textContent = lengthInput.value;
+            });
+
+            copyBtn.addEventListener('click', function () {
+                const password = passwordDisplay.textContent;
+                navigator.clipboard.writeText(password);
+                alert("Password copied to clipboard!");
+            });
+
+            showBtn.addEventListener('click', function () {
+                const password = passwordDisplay.textContent;
+                const type = passwordDisplay.getAttribute('type');
+                if (type === 'password') {
+                    passwordDisplay.textContent = password;
+                    passwordDisplay.setAttribute('type', 'text');
+                    showBtn.textContent = 'Hide';
+                } else {
+                    passwordDisplay.textContent = '**************';
+                    passwordDisplay.setAttribute('type', 'password');
+                    showBtn.textContent = 'Show';
+                }
+            });
+        });
+   </script>
+</body>
+</html>
